@@ -131,7 +131,7 @@ export default function AgenticSearchView() {
             Couldn't reach the search API.
           </div>
           <p className="mt-1 text-xs text-[hsl(var(--muted-foreground))]">
-            Check that the Mewbo API server is running and the master token is set.
+            Check that the MaxQ API server is running and the master token is set.
           </p>
         </div>
       </div>

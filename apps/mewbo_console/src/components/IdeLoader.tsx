@@ -204,7 +204,7 @@ export function IdeLoader({ sessionId }: IdeLoaderProps) {
             )}
           </div>
           <div className="min-w-0">
-            <h1 className="text-sm font-semibold">Mewbo Web IDE</h1>
+            <h1 className="text-sm font-semibold">MaxQ Web IDE</h1>
             <p className="text-xs text-[hsl(var(--muted-foreground))] font-mono truncate">
               {sessionId}
             </p>

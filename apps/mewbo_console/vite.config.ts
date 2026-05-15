@@ -32,6 +32,7 @@ export default defineConfig(({ mode }) => {
   );
 
   return {
+    base: "/",
     plugins: [
       react(),
       vitePluginStliteReact(),
@@ -51,8 +52,8 @@ export default defineConfig(({ mode }) => {
           "session-ide-floral-background-animation.svg"
         ],
         manifest: {
-          name: "Mewbo",
-          short_name: "Mewbo",
+          name: "MaxQ",
+          short_name: "MaxQ",
           start_url: "/",
           display: "standalone",
           theme_color: "#0a0a0a",
@@ -84,7 +85,7 @@ export default defineConfig(({ mode }) => {
           // docker/nginx-reverse-proxy.conf + docker/nginx-ide-proxy.conf).
           // It is NOT a SPA route — the NavigationRoute handler would otherwise
           // claim the navigation and serve index.html, leaving the user on the
-          // Mewbo shell instead of Coder. Note the trailing slash: this must
+          // MaxQ shell instead of Coder. Note the trailing slash: this must
           // NOT match `/ide-loader/:sessionId`, which *is* a SPA route.
           navigateFallbackDenylist: [/^\/api/, /^\/runtime-config\.js$/, /^\/ide\//],
           cleanupOutdatedCaches: true,
@@ -110,7 +111,7 @@ export default defineConfig(({ mode }) => {
               urlPattern: ({ request }) => request.mode === "navigate",
               handler: "NetworkFirst",
               options: {
-                cacheName: "mewbo-html",
+                cacheName: "maxq-html",
                 networkTimeoutSeconds: 3,
                 expiration: { maxEntries: 10, maxAgeSeconds: 60 * 60 * 24 }
               }

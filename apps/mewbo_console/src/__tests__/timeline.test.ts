@@ -403,7 +403,7 @@ describe("buildTimeline — turn token usage (peak for input, sum for output)", 
 });
 
 describe("agent_message events — chat label in buildLogs", () => {
-  test("root agent (depth=0) is labelled 'root', not 'mewbo'", () => {
+  test("root agent (depth=0) is labelled 'root', not 'maxq'", () => {
     const logs = buildLogs([
       ev("2026-04-22T10:00:00Z", "agent_message", {
         text: "hello from root",

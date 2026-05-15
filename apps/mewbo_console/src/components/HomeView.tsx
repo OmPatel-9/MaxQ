@@ -27,6 +27,7 @@ interface HomeViewProps {
   onArchive: (sessionId: string) => void;
   onUnarchive: (sessionId: string) => void;
   isCreating?: boolean;
+  apiMode?: 'auto' | 'mock' | 'live';
   onRetry?: () => void;
 }
 export function HomeView({
@@ -43,6 +44,7 @@ export function HomeView({
   onArchive,
   onUnarchive,
   isCreating = false,
+  apiMode = 'auto',
   onRetry
 }: HomeViewProps) {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -124,11 +126,16 @@ export function HomeView({
       <section className="min-h-[85dvh] flex flex-col items-center justify-center px-4 pt-16 pb-16 relative">
         <img
           src="/logo-transparent.svg"
-          alt="Mewbo"
+          alt="MaxQ"
           className="w-16 h-16 mb-6 drop-shadow-[0_0_40px_hsl(var(--primary)/.25)]" />
         <h1 className="text-4xl sm:text-5xl font-semibold text-[hsl(var(--foreground))] tracking-tight mb-3">
-          Mewbo
+          MaxQ
         </h1>
+        {apiMode === 'mock' &&
+        <div className="mb-3 inline-flex items-center gap-2 rounded-md border border-[hsl(var(--primary))]/25 bg-[hsl(var(--primary))]/10 px-2.5 py-1 text-xs font-medium text-[hsl(var(--primary))]">
+            Offline demo mode
+          </div>
+        }
         <TypewriterGreeting />
 
         <div className="w-full max-w-4xl">

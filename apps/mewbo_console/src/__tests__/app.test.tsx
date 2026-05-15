@@ -26,6 +26,8 @@ function render(ui: ReactElement) {
   return rtlRender(<QueryClientProvider client={qc}>{ui}</QueryClientProvider>);
 }
 vi.mock("../api/client", () => ({
+  API_MODE: "auto",
+  IS_MOCK_API: false,
   listSessions: vi.fn(),
   createSession: vi.fn(),
   postQuery: vi.fn(),
@@ -79,6 +81,7 @@ const uploadAttachments = vi.mocked(client.uploadAttachments);
 const createShare = vi.mocked(client.createShare);
 const exportSession = vi.mocked(client.exportSession);
 const resolveShare = vi.mocked(client.resolveShare);
+const fetchCommands = vi.mocked(client.fetchCommands);
 beforeEach(() => {
   vi.resetAllMocks();
   listTools.mockResolvedValue([]);
@@ -109,6 +112,7 @@ beforeEach(() => {
     events: [],
     summary: null
   });
+  fetchCommands.mockResolvedValue([]);
   (client as Record<string, unknown>).getConfigSchema = vi.fn().mockResolvedValue({ type: "object", properties: {} });
   (client as Record<string, unknown>).getConfig = vi.fn().mockResolvedValue({});
   (client as Record<string, unknown>).patchConfig = vi.fn().mockResolvedValue({});

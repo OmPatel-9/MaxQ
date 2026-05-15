@@ -366,7 +366,7 @@ export function NavBar({
           Settings
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <a href="https://docs.mewbo.com" target="_blank" rel="noopener noreferrer">
+          <a href="https://github.com/bearlike/Assistant#readme" target="_blank" rel="noopener noreferrer">
             <BookOpen className="w-3.5 h-3.5 mr-2" />
             Documentation
             <ExternalLink className="w-3 h-3 ml-auto text-[hsl(var(--muted-foreground))]" />
@@ -401,9 +401,9 @@ export function NavBar({
             onClick={onBack}
             aria-label="Go to home"
             className="flex items-center gap-2 rounded px-1 -mx-1 py-0.5 hover:opacity-70 transition-opacity">
-            <img src="/logo-transparent.svg" alt="Mewbo" className="w-5 h-5" />
+            <img src="/logo-transparent.svg" alt="MaxQ" className="w-5 h-5" />
             <span className="font-semibold text-sm text-[hsl(var(--foreground))]">
-              Mewbo
+              MaxQ
             </span>
             <VersionBadge />
           </button>

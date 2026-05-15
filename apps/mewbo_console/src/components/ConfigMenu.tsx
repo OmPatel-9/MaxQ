@@ -649,7 +649,7 @@ export function ConfigMenu({
                               <span className="font-mono truncate">{wt.branch}</span>
                               <span
                                 className="text-[10px] text-[hsl(var(--muted-foreground))] bg-[hsl(var(--muted))] px-1 py-0.5 rounded shrink-0"
-                                title={wt.managed ? 'Created by Mewbo' : 'Existing git worktree on disk'}
+                                title={wt.managed ? 'Created by MaxQ' : 'Existing git worktree on disk'}
                               >
                                 {wt.managed ? 'managed' : 'user'}
                               </span>

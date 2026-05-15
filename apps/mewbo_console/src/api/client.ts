@@ -14,7 +14,8 @@ import {
   SessionUsage,
   ShareRecord
 } from '../types';
-import { AgentSummary, MarketplacePlugin, ModelInfo, PluginSummary, ProjectSummary, SkillSummary, ToolSummary } from './contracts';
+import { AgentSummary, ApiMode, MarketplacePlugin, ModelInfo, PluginSummary, ProjectSummary, SkillSummary, ToolSummary } from './contracts';
+import { createMockClient, fetchMockGitDiff } from './mockClient';
 import { createRealClient } from './realClient';
 
 // Runtime config injected by nginx (docker), falls back to Vite build-time env.
@@ -27,8 +28,13 @@ export const API_BASE =
     ? ''
     : _rc?.VITE_API_BASE_URL ?? import.meta.env.VITE_API_BASE_URL ?? import.meta.env.VITE_API_BASE ?? '';
 export const API_KEY = _rc?.VITE_API_KEY ?? import.meta.env.VITE_API_KEY ?? '';
+const configuredApiMode = _rc?.VITE_API_MODE ?? import.meta.env.VITE_API_MODE ?? 'auto';
+export const API_MODE: ApiMode =
+  configuredApiMode === 'mock' || configuredApiMode === 'live' ? configuredApiMode : 'auto';
+export const IS_MOCK_API = API_MODE === 'mock';
 
 const realClient = createRealClient({ baseUrl: API_BASE, apiKey: API_KEY });
+const client = IS_MOCK_API ? createMockClient() : realClient;
 
 function parseBool(value?: string): boolean {
   if (!value) {
@@ -42,11 +48,11 @@ function parseBool(value?: string): boolean {
 // ---------------------------------------------------------------------------
 
 export async function listSessions(includeArchived = false): Promise<SessionSummary[]> {
-  return realClient.listSessions(includeArchived);
+  return client.listSessions(includeArchived);
 }
 
 export async function createSession(context?: SessionContext): Promise<string> {
-  return realClient.createSession(context);
+  return client.createSession(context);
 }
 
 export async function postQuery(
@@ -56,39 +62,39 @@ export async function postQuery(
   mode?: QueryMode,
   attachments?: AttachmentPayload[]
 ): Promise<void> {
-  return realClient.postQuery(sessionId, query, context, mode, attachments);
+  return client.postQuery(sessionId, query, context, mode, attachments);
 }
 
 export async function fetchEvents(
   sessionId: string,
   after?: string
 ): Promise<{ events: EventRecord[]; running: boolean }> {
-  return realClient.fetchEvents(sessionId, after);
+  return client.fetchEvents(sessionId, after);
 }
 
 export async function fetchUsage(sessionId: string): Promise<SessionUsage> {
-  return realClient.fetchUsage(sessionId);
+  return client.fetchUsage(sessionId);
 }
 
 export async function archiveSession(sessionId: string): Promise<void> {
-  return realClient.archiveSession(sessionId);
+  return client.archiveSession(sessionId);
 }
 
 export async function unarchiveSession(sessionId: string): Promise<void> {
-  return realClient.unarchiveSession(sessionId);
+  return client.unarchiveSession(sessionId);
 }
 
 export async function updateSessionTitle(
   sessionId: string,
   title: string
 ): Promise<{ session_id: string; title: string }> {
-  return realClient.updateSessionTitle(sessionId, title);
+  return client.updateSessionTitle(sessionId, title);
 }
 
 export async function regenerateTitle(
   sessionId: string
 ): Promise<{ session_id: string; title: string }> {
-  return realClient.regenerateTitle(sessionId);
+  return client.regenerateTitle(sessionId);
 }
 
 export async function uploadAttachments(
@@ -96,59 +102,59 @@ export async function uploadAttachments(
   files: File[],
   model?: string | null
 ): Promise<AttachmentRecord[]> {
-  return realClient.uploadAttachments(sessionId, files, model);
+  return client.uploadAttachments(sessionId, files, model);
 }
 
 export async function createShare(sessionId: string): Promise<ShareRecord> {
-  return realClient.createShare(sessionId);
+  return client.createShare(sessionId);
 }
 
 export async function exportSession(sessionId: string): Promise<SessionExport> {
-  return realClient.exportSession(sessionId);
+  return client.exportSession(sessionId);
 }
 
 export async function resolveShare(token: string): Promise<SessionExport> {
-  return realClient.resolveShare(token);
+  return client.resolveShare(token);
 }
 
 export async function listTools(project?: string): Promise<ToolSummary[]> {
-  return realClient.listTools(project);
+  return client.listTools(project);
 }
 
 export async function listModels(): Promise<ModelInfo> {
-  return realClient.listModels();
+  return client.listModels();
 }
 
 export async function listProjects(): Promise<ProjectSummary[]> {
-  return realClient.listProjects();
+  return client.listProjects();
 }
 
 export async function listSkills(project?: string): Promise<SkillSummary[]> {
-  return realClient.listSkills(project);
+  return client.listSkills(project);
 }
 
 export async function listNotifications(): Promise<NotificationItem[]> {
-  return realClient.listNotifications();
+  return client.listNotifications();
 }
 
 export async function dismissNotification(ids: string[]): Promise<void> {
-  return realClient.dismissNotification(ids);
+  return client.dismissNotification(ids);
 }
 
 export async function clearNotifications(clearAll = false): Promise<void> {
-  return realClient.clearNotifications(clearAll);
+  return client.clearNotifications(clearAll);
 }
 
 export async function sendMessage(sessionId: string, text: string): Promise<void> {
-  return realClient.sendMessage(sessionId, text);
+  return client.sendMessage(sessionId, text);
 }
 
 export async function interruptStep(sessionId: string): Promise<void> {
-  return realClient.interruptStep(sessionId);
+  return client.interruptStep(sessionId);
 }
 
 export async function approvePlan(sessionId: string, approved: boolean): Promise<void> {
-  return realClient.approvePlan(sessionId, approved);
+  return client.approvePlan(sessionId, approved);
 }
 
 export async function recoverSession(
@@ -158,18 +164,18 @@ export async function recoverSession(
   editedText?: string,
   model?: string
 ): Promise<void> {
-  return realClient.recoverSession(sessionId, action, fromTs, editedText, model);
+  return client.recoverSession(sessionId, action, fromTs, editedText, model);
 }
 
 export async function forkSession(
   sessionId: string,
   opts?: { fromTs?: string; model?: string; compact?: boolean; tag?: string }
 ): Promise<{ session_id: string; forked_from: string; forked_at: string | null }> {
-  return realClient.forkSession(sessionId, opts);
+  return client.forkSession(sessionId, opts);
 }
 
 export async function fetchPlanMarkdown(sessionId: string): Promise<string> {
-  return realClient.fetchPlanMarkdown(sessionId);
+  return client.fetchPlanMarkdown(sessionId);
 }
 
 export async function listAgents(sessionId: string): Promise<{
@@ -179,59 +185,59 @@ export async function listAgents(sessionId: string): Promise<{
   total_input_tokens: number;
   total_output_tokens: number;
 }> {
-  return realClient.listAgents(sessionId);
+  return client.listAgents(sessionId);
 }
 
 export async function getConfigSchema(): Promise<Record<string, unknown>> {
-  return realClient.getConfigSchema();
+  return client.getConfigSchema();
 }
 
 export async function getConfig(): Promise<Record<string, unknown>> {
-  return realClient.getConfig();
+  return client.getConfig();
 }
 
 export async function patchConfig(patch: Record<string, unknown>): Promise<Record<string, unknown>> {
-  return realClient.patchConfig(patch);
+  return client.patchConfig(patch);
 }
 
 export async function listPlugins(): Promise<PluginSummary[]> {
-  return realClient.listPlugins();
+  return client.listPlugins();
 }
 
 export async function listMarketplacePlugins(): Promise<MarketplacePlugin[]> {
-  return realClient.listMarketplacePlugins();
+  return client.listMarketplacePlugins();
 }
 
 export async function installPlugin(name: string, marketplace: string): Promise<void> {
-  return realClient.installPlugin(name, marketplace);
+  return client.installPlugin(name, marketplace);
 }
 
 export async function uninstallPlugin(name: string): Promise<void> {
-  return realClient.uninstallPlugin(name);
+  return client.uninstallPlugin(name);
 }
 
 export async function createVirtualProject(name: string, description: string, path?: string) {
-  return realClient.createVirtualProject(name, description, path);
+  return client.createVirtualProject(name, description, path);
 }
 
 export async function updateVirtualProject(id: string, data: { name?: string; description?: string }) {
-  return realClient.updateVirtualProject(id, data);
+  return client.updateVirtualProject(id, data);
 }
 
 export async function deleteVirtualProject(id: string): Promise<void> {
-  return realClient.deleteVirtualProject(id);
+  return client.deleteVirtualProject(id);
 }
 
 export async function listProjectBranches(projectId: string) {
-  return realClient.listProjectBranches(projectId);
+  return client.listProjectBranches(projectId);
 }
 
 export async function listWorktrees(projectId: string) {
-  return realClient.listWorktrees(projectId);
+  return client.listWorktrees(projectId);
 }
 
 export async function createWorktree(projectId: string, branch: string) {
-  return realClient.createWorktree(projectId, branch);
+  return client.createWorktree(projectId, branch);
 }
 
 export async function deleteWorktree(
@@ -239,13 +245,16 @@ export async function deleteWorktree(
   worktreeId: string,
   force = false
 ): Promise<void> {
-  return realClient.deleteWorktree(projectId, worktreeId, force);
+  return client.deleteWorktree(projectId, worktreeId, force);
 }
 
 export async function fetchGitDiff(
   sessionId: string,
   scope: "uncommitted" | "branch"
 ): Promise<{ git_repo: boolean; reason?: string; diff?: string }> {
+  if (IS_MOCK_API) {
+    return fetchMockGitDiff();
+  }
   const res = await fetch(
     `${API_BASE}/api/sessions/${sessionId}/git-diff?scope=${scope}`,
     { headers: { "X-Api-Key": API_KEY } }
@@ -255,7 +264,7 @@ export async function fetchGitDiff(
 }
 
 export async function fetchCommands(): Promise<import("../types").CommandSpec[]> {
-  return realClient.fetchCommands();
+  return client.fetchCommands();
 }
 
 export async function executeCommand(
@@ -263,7 +272,7 @@ export async function executeCommand(
   name: string,
   args: string[]
 ): Promise<import("../types").CommandResult> {
-  return realClient.executeCommand(sessionId, name, args);
+  return client.executeCommand(sessionId, name, args);
 }
 
 export type { AgentSummary, MarketplacePlugin, PluginSummary, ProjectSummary, SkillSummary, ToolSummary };

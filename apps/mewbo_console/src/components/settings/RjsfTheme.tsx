@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 /**
- * Tailwind-styled RJSF templates for the Mewbo console.
+ * Tailwind-styled RJSF templates for the MaxQ console.
  *
  * Renders plain HTML styled with the project's HSL CSS variables.
  * No UI component library is introduced.

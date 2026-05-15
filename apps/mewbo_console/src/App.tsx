@@ -17,6 +17,7 @@ const AgenticSearchView = lazy(() => import('./components/agentic_search/Agentic
 import {
   createShare,
   exportSession,
+  API_MODE,
   getConfig,
   postQuery,
   uploadAttachments
@@ -273,20 +274,20 @@ export function App() {
   }, []);
   useEffect(() => {
     if (isSettings) {
-      document.title = 'Mewbo | Settings';
+      document.title = 'MaxQ | Settings';
     } else if (isPlugins) {
-      document.title = 'Mewbo | Plugins';
+      document.title = 'MaxQ | Plugins';
     } else if (isProjects) {
-      document.title = 'Mewbo | Projects';
+      document.title = 'MaxQ | Projects';
     } else if (isSearch) {
-      document.title = 'Mewbo | Search';
+      document.title = 'MaxQ | Search';
     } else if (isIdeLoader) {
-      document.title = 'Mewbo | Opening Web IDE';
+      document.title = 'MaxQ | Opening Web IDE';
     } else if (isSessionRoute) {
       const title = activeSession?.title?.trim();
-      document.title = title ? `${title} | Mewbo` : 'Session | Mewbo';
+      document.title = title ? `${title} | MaxQ` : 'Session | MaxQ';
     } else {
-      document.title = 'Mewbo';
+      document.title = 'MaxQ';
     }
   }, [isSettings, isPlugins, isProjects, isSearch, isIdeLoader, isSessionRoute, activeSession]);
 
@@ -381,6 +382,7 @@ export function App() {
               onArchive={archive}
               onUnarchive={unarchive}
               isCreating={creating}
+              apiMode={API_MODE}
               onRetry={refresh} />
           </div>
         </Route>

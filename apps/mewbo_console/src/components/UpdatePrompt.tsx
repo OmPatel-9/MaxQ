@@ -67,7 +67,7 @@ export function UpdatePrompt() {
       aria-live="polite"
       className="fixed bottom-4 right-4 z-[60] flex items-center gap-3 rounded-lg border border-neutral-700 bg-neutral-900/95 px-4 py-3 text-sm text-neutral-100 shadow-lg backdrop-blur"
     >
-      <span>A new version of Mewbo is available.</span>
+      <span>A new version of MaxQ is available.</span>
       <Button
         variant="primary"
         size="sm"

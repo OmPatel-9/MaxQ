@@ -135,7 +135,7 @@ export function WorktreesPanel({ projectId }: WorktreesPanelProps) {
               <span className="truncate font-mono">{wt.branch}</span>
               <span
                 className="text-[10px] text-[hsl(var(--muted-foreground))] bg-[hsl(var(--muted))] px-1 py-0.5 rounded shrink-0"
-                title={wt.managed ? 'Created by Mewbo' : 'Existing on-disk worktree'}
+                title={wt.managed ? 'Created by MaxQ' : 'Existing on-disk worktree'}
               >
                 {wt.managed ? 'managed' : 'user'}
               </span>

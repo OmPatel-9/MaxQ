@@ -65,7 +65,7 @@ function useFontInjection() {
 }
 
 /**
- * Subscribe to the Mewbo console's theme. App.tsx toggles by
+ * Subscribe to the MaxQ console's theme. App.tsx toggles by
  * adding/removing the `light` class on `<html>` (dark is the default, with
  * no class); a MutationObserver on that single attribute is cheaper than a
  * React context + provider and fires exactly once per toggle.
